@@ -1,0 +1,60 @@
+{
+  "users": [
+    {
+      "id": 1,
+      "username": "user1",
+      "password": "user1",
+      "firstName": "Marco",
+      "lastName": "Ferreira",
+      "token": "fake-jwt-token"
+    },
+    {
+      "id": 2,
+      "username": "user2",
+      "password": "user2",
+      "firstName": "Antonio",
+      "lastName": "Prado",
+      "token": "fake-jwt-token"
+    },
+    {
+      "id": 3,
+      "username": "user3",
+      "password": "user3",
+      "firstName": "Carlos",
+      "lastName": "Alberto",
+      "token": "fake-jwt-token"
+    },
+    {
+      "id": 4,
+      "username": "user4",
+      "password": "user4",
+      "firstName": "Luis",
+      "lastName": "Fernando",
+      "token": "fake-jwt-token"
+    },
+    {
+      "id": 5,
+      "username": "user5",
+      "password": "user5",
+      "firstName": "Pedro",
+      "lastName": "Celestino",
+      "token": "fake-jwt-token"
+    },
+    {
+      "id": 6,
+      "username": "user6",
+      "password": "user6",
+      "firstName": "João",
+      "lastName": "Nogueira",
+      "token": "fake-jwt-token"
+    },
+    {
+      "id": 7,
+      "username": "user7",
+      "password": "user7",
+      "firstName": "Marcelo",
+      "lastName": "Alves",
+      "token": "fake-jwt-token"
+    }
+  ]
+}
