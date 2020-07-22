@@ -9,6 +9,7 @@
 		<PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="3.1.6" />
 		<PackageReference Include="Swashbuckle.AspNetCore" Version="5.5.1" />	</ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\PRJ.Common\PRJ.Common.csproj" />
     <ProjectReference Include="..\PRJ.Data\PRJ.Data.csproj" />
     <ProjectReference Include="..\PRJ.Service\PRJ.Service.csproj" />
   </ItemGroup>

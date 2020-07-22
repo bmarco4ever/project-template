@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
+using PRJ.Common.Entities;
 using PRJ.Domain.Entities;
 using PRJ.Domain.Interfaces.Services;
 using System;
@@ -34,17 +35,29 @@ namespace PRJ.Application.Controllers
 
         [HttpPost, AllowAnonymous]
         [Route("Token")]
-        public async Task<IActionResult> CreateToken(string email, string password)
+        public async Task<ApiResult> CreateToken(string email, string password)
         {
             var user = await _userService.AuthenticateAsync(email, password);
 
             if (user != null)
             {
                 var tokenString = BuildToken(user);
-                return Ok(new { token = tokenString });
+
+                return new ApiResult { 
+                    Success = true,
+                    Message = "OK",
+                    Value = tokenString,
+                    StatusCode = HttpStatusCode.OK
+                };
             }
 
-            return Unauthorized();
+            return new ApiResult
+            {
+                Success = false,
+                Message = "Unauthorized",
+                Value = null,
+                StatusCode = HttpStatusCode.Unauthorized
+            };
         }
 
         private string BuildToken(UserEntity user)
@@ -75,109 +88,162 @@ namespace PRJ.Application.Controllers
 
 
         [HttpGet, Authorize]
-        public async Task<ActionResult> GetAll()
+        public async Task<ApiResult> GetAll()
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
             try
             {
-                return Ok(await _userService.GetAllAsync());
+                var entities = await _userService.GetAllAsync();
+
+                return new ApiResult
+                {
+                    Success = true,
+                    Message = "OK",
+                    Value = entities,
+                    StatusCode = HttpStatusCode.OK
+                };
             }
             catch (ArgumentException e)
             {
-                return StatusCode((int)HttpStatusCode.InternalServerError, e.Message);
+                return new ApiResult
+                {
+                    Success = false,
+                    Message = e.Message,
+                    Value = null,
+                    StatusCode = HttpStatusCode.InternalServerError
+                };
             }
         }
 
         [HttpGet, Authorize]
         [Route("{id}", Name = "GetWithId")]
-        public async Task<ActionResult> Get(int id)
+        public async Task<ApiResult> Get(int id)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
             try
             {
-                return Ok(await _userService.GetAsync(id));
+                var entity = await _userService.GetAsync(id);
+
+                return new ApiResult
+                {
+                    Success = true,
+                    Message = "OK",
+                    Value = entity,
+                    StatusCode = HttpStatusCode.OK
+                };
             }
             catch (ArgumentException e)
             {
-                return StatusCode((int)HttpStatusCode.InternalServerError, e.Message);
+                return new ApiResult
+                {
+                    Success = false,
+                    Message = e.Message,
+                    Value = null,
+                    StatusCode = HttpStatusCode.InternalServerError
+                };
             }
         }
 
         [HttpPost, Authorize]
-        public async Task<ActionResult> Create([FromBody] UserEntity user)
+        public async Task<ApiResult> Create([FromBody] UserEntity user)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
             try
             {
                 var result = await _userService.CreateAsync(user);
                 if (result != null)
                 {
-                    return Created(new Uri(Url.Link("GetWithId", new { id = result.Id })), result);
+                    // return Created(new Uri(Url.Link("GetWithId", new { id = result.Id })), result);
+                    return new ApiResult
+                    {
+                        Success = true,
+                        Message = new Uri(Url.Link("GetWithId", new { id = result.Id })).ToString(),
+                        Value = result,
+                        StatusCode = HttpStatusCode.OK
+                    };
                 }
                 else
                 {
-                    return BadRequest();
+                    return new ApiResult
+                    {
+                        Success = false,
+                        Message = "BadRequest",
+                        Value = null,
+                        StatusCode = HttpStatusCode.BadRequest
+                    };
                 }
             }
             catch (ArgumentException e)
             {
-                return StatusCode((int)HttpStatusCode.InternalServerError, e.Message);
+                return new ApiResult
+                {
+                    Success = false,
+                    Message = e.Message,
+                    Value = null,
+                    StatusCode = HttpStatusCode.InternalServerError
+                };
             }
         }
 
         [HttpPut, Authorize]
-        public async Task<ActionResult> Update([FromBody] UserEntity user)
+        public async Task<ApiResult> Update([FromBody] UserEntity user)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
             try
             {
                 var result = await _userService.UpdateAsync(user);
                 if (result != null)
                 {
-                    return Ok(result);
+                    return new ApiResult
+                    {
+                        Success = true,
+                        Message = "OK",
+                        Value = result,
+                        StatusCode = HttpStatusCode.OK
+                    };
                 }
                 else
                 {
-                    return BadRequest();
+                    return new ApiResult
+                    {
+                        Success = false,
+                        Message = "BadRequest",
+                        Value = null,
+                        StatusCode = HttpStatusCode.BadRequest
+                    };
                 }
             }
             catch (ArgumentException e)
             {
-                return StatusCode((int)HttpStatusCode.InternalServerError, e.Message);
+                return new ApiResult
+                {
+                    Success = false,
+                    Message = e.Message,
+                    Value = null,
+                    StatusCode = HttpStatusCode.InternalServerError
+                };
             }
         }
 
         [HttpDelete("{id}"), Authorize]
-        public async Task<ActionResult> Remove(int id)
+        public async Task<ApiResult> Remove(int id)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
             try
             {
-                return Ok(await _userService.RemoveAsync(id));
+                var result =  await _userService.RemoveAsync(id);
+                return new ApiResult
+                {
+                    Success = true,
+                    Message = "OK",
+                    Value = result,
+                    StatusCode = HttpStatusCode.OK
+                };
             }
             catch (ArgumentException e)
             {
-                return StatusCode((int)HttpStatusCode.InternalServerError, e.Message);
+                return new ApiResult
+                {
+                    Success = false,
+                    Message = e.Message,
+                    Value = null,
+                    StatusCode = HttpStatusCode.InternalServerError
+                };
             }
         }
     }

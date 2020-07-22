@@ -25,7 +25,6 @@ namespace PRJ.Services
                 if (user == null) return null;
                 if (user.Password == password)
                 {
-                    user.Password = string.Empty;
                     return user;
                 }
             }
@@ -39,7 +38,7 @@ namespace PRJ.Services
 
         public async Task<UserEntity> GetAsync(int id)
         {
-            return await _context.Users.FirstOrDefaultAsync(o=>o.Id == id);
+            return await _context.Users.FirstOrDefaultAsync(o => o.Id == id);
         }
 
         public async Task<IEnumerable<UserEntity>> GetAllAsync()

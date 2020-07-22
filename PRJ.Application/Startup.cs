@@ -8,12 +8,14 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using PRJ.Data;
 using PRJ.Domain.Interfaces;
 using PRJ.Domain.Interfaces.Services;
 using PRJ.Services;
+using Swashbuckle.AspNetCore.SwaggerUI;
 using System;
 using System.Globalization;
 using System.Text;
@@ -46,8 +48,8 @@ namespace PRJ.Application
             services.AddCors();
             services.AddControllers().AddNewtonsoftJson(options =>
             {
-                options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
-                options.SerializerSettings.PreserveReferencesHandling = PreserveReferencesHandling.Objects;
+                //options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
+                //options.SerializerSettings.PreserveReferencesHandling = PreserveReferencesHandling.Objects;
                 options.SerializerSettings.DateFormatString = "yyyy-MM-dd HH:mm:ss";
                 options.SerializerSettings.Formatting = Formatting.Indented;
                 options.SerializerSettings.ContractResolver = new DefaultContractResolver();
@@ -81,24 +83,27 @@ namespace PRJ.Application
                     ClockSkew = TimeSpan.Zero
                 };
             });
-
-
-            //services.AddSwaggerGen(c =>
-            //{
-            //    c.SwaggerDoc("v1",
-            //        new info
-            //        {
-            //            Title = "ASP.NET Core C# API REST Template",
-            //            Version = "v1",
-            //            Description = "Exemplo de API REST",
-            //            Contact = new Contact
-            //            {
-            //                Name = "xxxxxxxxxxxxxxxxxxxxxxx",
-            //                Url = "https://github.com/mfrinfo"
-            //            }
-            //        });
-            //});
-
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new OpenApiInfo
+                {
+                    Version = "v1",
+                    Title = "ToDo API",
+                    Description = "A simple example ASP.NET Core Web API",
+                    TermsOfService = new Uri("https://example.com/terms"),
+                    Contact = new OpenApiContact
+                    {
+                        Name = "My Name",
+                        Email = string.Empty,
+                        Url = new Uri("https://example.com/twitter"),
+                    },
+                    License = new OpenApiLicense
+                    {
+                        Name = "Use under LICENSE",
+                        Url = new Uri("https://example.com/license"),
+                    }
+                });
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -118,13 +123,14 @@ namespace PRJ.Application
                 app.UseDeveloperExceptionPage();
             }
 
-            // Ativando middlewares para uso do Swagger
-            //app.UseSwagger();
-            //app.UseSwaggerUI(c =>
-            //{
-            //    c.SwaggerEndpoint("/swagger/v1/swagger.json", "CORE REST API TEMPLATE");
-            //    c.RoutePrefix = string.Empty;
-            //});
+            app.UseSwagger();
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "v1");
+                c.DocumentTitle = "Todo APIs";
+                //c.DocExpansion(DocExpansion.None);
+                c.RoutePrefix = string.Empty;
+            });
 
             app.UseRouting();
             app.UseAuthorization();

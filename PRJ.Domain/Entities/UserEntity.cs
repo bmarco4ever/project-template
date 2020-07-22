@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Text.Json.Serialization;
 
 namespace PRJ.Domain.Entities
 {
@@ -7,6 +8,7 @@ namespace PRJ.Domain.Entities
         public long Id { get; set; }
         public string Name { get; set; }
         public string Email { get; set; }
+        [JsonIgnore]
         public string Password { get; set; }
         public string CreatedBy { get; set; }
         public DateTime? CreatedAt { get; set; }
