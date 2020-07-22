@@ -12,14 +12,5 @@ namespace PRJ.Common.Entities
         public string Message { get; set; }
 
         public object Value { get; set; }
-
-        public HttpStatusCode StatusCode { get; set; }
-        public string StatusDescription
-        {
-            get
-            {
-                return this.StatusCode.ToString();
-            }
-        }
     }
 }

@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Localization;
@@ -15,7 +14,6 @@ using PRJ.Data;
 using PRJ.Domain.Interfaces;
 using PRJ.Domain.Interfaces.Services;
 using PRJ.Services;
-using Swashbuckle.AspNetCore.SwaggerUI;
 using System;
 using System.Globalization;
 using System.Text;
@@ -43,72 +41,70 @@ namespace PRJ.Application
             // -----> Dependency Injection
             services.AddScoped<IDataContext>(provider => provider.GetService<DataContext>());
             services.AddTransient<IUserService, UserService>();
+            services.AddTransient<ITokenService, TokenService>();
             // -----> Dependency Injection
 
             services.AddCors();
             services.AddControllers().AddNewtonsoftJson(options =>
             {
-                //options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
-                //options.SerializerSettings.PreserveReferencesHandling = PreserveReferencesHandling.Objects;
                 options.SerializerSettings.DateFormatString = "yyyy-MM-dd HH:mm:ss";
                 options.SerializerSettings.Formatting = Formatting.Indented;
                 options.SerializerSettings.ContractResolver = new DefaultContractResolver();
             });
 
-            services.AddAuthorization(auth =>
+            services.AddAuthentication(x =>
             {
-                auth.AddPolicy("Bearer", new AuthorizationPolicyBuilder()
-                    .AddAuthenticationSchemes(JwtBearerDefaults.AuthenticationScheme‌​)
-                    .RequireAuthenticatedUser().Build());
-            });
-
-            services.AddAuthentication(options =>
-            {
-                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-                options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
-                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+                x.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+                x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+                x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                x.DefaultSignInScheme = JwtBearerDefaults.AuthenticationScheme;
             })
-                .AddJwtBearer(options =>
+            .AddJwtBearer(x =>
             {
-                options.SaveToken = true;
-                options.TokenValidationParameters = new TokenValidationParameters()
+                x.RequireHttpsMetadata = false;
+                x.SaveToken = true;
+                x.TokenValidationParameters = new TokenValidationParameters
                 {
                     ValidateIssuerSigningKey = true,
-                    ValidateLifetime = true,
-                    ValidateIssuer = true,
-                    ValidateAudience = true,
-                    ValidIssuer = Configuration["Jwt:Issuer"],
-                    ValidAudience = Configuration["Jwt:Issuer"],
-                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["Jwt:Key"])),
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(Configuration["Jwt:Key"])),
+                    ValidateIssuer = false,
+                    ValidateAudience = false,
+                    // set clockskew to zero so tokens expire exactly at token expiration time (instead of 5 minutes later)
                     ClockSkew = TimeSpan.Zero
                 };
             });
+
             services.AddSwaggerGen(c =>
-            {
-                c.SwaggerDoc("v1", new OpenApiInfo
                 {
-                    Version = "v1",
-                    Title = "ToDo API",
-                    Description = "A simple example ASP.NET Core Web API",
-                    TermsOfService = new Uri("https://example.com/terms"),
-                    Contact = new OpenApiContact
+                    c.SwaggerDoc("v1", new OpenApiInfo
                     {
-                        Name = "My Name",
-                        Email = string.Empty,
-                        Url = new Uri("https://example.com/twitter"),
-                    },
-                    License = new OpenApiLicense
-                    {
-                        Name = "Use under LICENSE",
-                        Url = new Uri("https://example.com/license"),
-                    }
+                        Version = "v1",
+                        Title = "ToDo API",
+                        Description = "A simple example ASP.NET Core Web API",
+                        TermsOfService = new Uri("https://example.com/terms"),
+                        Contact = new OpenApiContact
+                        {
+                            Name = "My Name",
+                            Email = string.Empty,
+                            Url = new Uri("https://example.com/twitter"),
+                        },
+                        License = new OpenApiLicense
+                        {
+                            Name = "Use under LICENSE",
+                            Url = new Uri("https://example.com/license"),
+                        }
+                    });
                 });
-            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            if (env.IsDevelopment())
+            {
+                app.UseDeveloperExceptionPage();
+            }
+
             var locale = Configuration["SiteLocale"];
             var supportedCultures = new[] { new CultureInfo(locale) };
             app.UseRequestLocalization(new RequestLocalizationOptions
@@ -118,23 +114,26 @@ namespace PRJ.Application
                 SupportedUICultures = supportedCultures
             });
 
-            if (env.IsDevelopment())
-            {
-                app.UseDeveloperExceptionPage();
-            }
-
             app.UseSwagger();
             app.UseSwaggerUI(c =>
             {
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "v1");
                 c.DocumentTitle = "Todo APIs";
-                //c.DocExpansion(DocExpansion.None);
                 c.RoutePrefix = string.Empty;
             });
 
             app.UseRouting();
-            app.UseAuthorization();
+
+            // global cors policy
+            app.UseCors(x => x
+                .SetIsOriginAllowed(origin => true)
+                .AllowAnyMethod()
+                .AllowAnyHeader()
+                .AllowCredentials());
+
             app.UseAuthentication();
+            app.UseAuthorization();
+
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
