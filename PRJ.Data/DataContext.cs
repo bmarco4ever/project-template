@@ -19,6 +19,7 @@ namespace PRJ.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
+
             /* Database Configuration */
             modelBuilder.Entity<UserEntity>(new UserConfiguration().Configure);
             /* Database Configuration */

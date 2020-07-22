@@ -3,17 +3,17 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.30128.74
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PRJ.Application", "PRJ.Application\PRJ.Application.csproj", "{F5E25661-499A-45F2-84C1-536198892AA8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PRJ.Application", "PRJ.Application\PRJ.Application.csproj", "{F5E25661-499A-45F2-84C1-536198892AA8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PRJ.Common", "PRJ.Common\PRJ.Common.csproj", "{35FB5E80-8F06-40AE-9E4D-110A6F59C5B5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PRJ.Common", "PRJ.Common\PRJ.Common.csproj", "{35FB5E80-8F06-40AE-9E4D-110A6F59C5B5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PRJ.Domain", "PRJ.Domain\PRJ.Domain.csproj", "{9DB3B159-A18C-404C-91A3-722F19A3B296}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PRJ.Domain", "PRJ.Domain\PRJ.Domain.csproj", "{9DB3B159-A18C-404C-91A3-722F19A3B296}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PRJ.Service", "PRJ.Service\PRJ.Service.csproj", "{2E5DFAFE-F02E-4CFA-B93D-F7BE12984BFF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PRJ.Service", "PRJ.Service\PRJ.Service.csproj", "{2E5DFAFE-F02E-4CFA-B93D-F7BE12984BFF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PRJ.Data", "PRJ.Data\PRJ.Data.csproj", "{2B89C922-F95D-46D8-BCBA-199FE8312FA6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PRJ.Data", "PRJ.Data\PRJ.Data.csproj", "{2B89C922-F95D-46D8-BCBA-199FE8312FA6}"
 EndProject
-Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "PRJ.Test", "PRJ.Test\PRJ.Test.fsproj", "{8CC5F2EF-DB6C-40F6-AF87-C74D394BCFD5}"
+Project("{6EC3EE1D-3C4E-46DD-8F32-0CC8E7565705}") = "PRJ.UnitTest", "PRJ.Test\PRJ.UnitTest.fsproj", "{8CC5F2EF-DB6C-40F6-AF87-C74D394BCFD5}"
 EndProject
 Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "PRJ.Presentation", "PRJ.Presentation\", "{0FE33DF9-CF39-4909-9F6B-653707902338}"
 	ProjectSection(WebsiteProperties) = preProject

@@ -8,7 +8,9 @@ namespace PRJ.Domain.Interfaces
 {
     public interface IDataContext
     {
+        /* Repositories Definition */
         DbSet<UserEntity> Users { get; set; }
+        /* Repositories Definition */
 
         DatabaseFacade Database { get; }
         int SaveChanges();

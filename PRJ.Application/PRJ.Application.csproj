@@ -1,8 +1,17 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
   </PropertyGroup>
+	<ItemGroup>
+		<PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="3.1.6" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="3.1.6" />
+		<PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="3.1.6" />
+		<PackageReference Include="Swashbuckle.AspNetCore" Version="5.5.1" />	</ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\PRJ.Data\PRJ.Data.csproj" />
+    <ProjectReference Include="..\PRJ.Service\PRJ.Service.csproj" />
+  </ItemGroup>
 
 
 </Project>

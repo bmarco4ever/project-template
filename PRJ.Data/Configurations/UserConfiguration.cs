@@ -10,7 +10,7 @@ namespace PRJ.Data.Configurations
         {
             /* Table */
             builder
-                .ToTable("User")
+                .ToTable("user")
                 .HasKey(u => u.Id);
             /* Index */
             builder
@@ -21,14 +21,14 @@ namespace PRJ.Data.Configurations
             builder.Property(u => u.Id);
             builder.Property(u => u.Name).IsRequired().HasMaxLength(60);
             builder.Property(u => u.Email);
+            builder.Property(u => u.Password);
             builder.Property(u => u.CreatedBy);
             builder.Property(u => u.CreatedAt);
             builder.Property(u => u.ModifiedBy);
             builder.Property(u => u.ModifiedAt);
             builder.Property(u => u.IsBlocked);
 
-            /* Relationship */
-
+            /* Relationships */
         }
     }
 }
